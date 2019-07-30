@@ -1,0 +1,129 @@
+package com.nxa.study.planewar.runtime;
+
+import com.nxa.study.planewar.base.BaseSprite;
+import com.nxa.study.planewar.base.Drawable;
+import com.nxa.study.planewar.base.Moveable;
+import com.nxa.study.planewar.constant.FrameConstant;
+import com.nxa.study.planewar.main.GameFrame;
+import com.nxa.study.planewar.util.DateStore;
+import com.nxa.study.planewar.util.ImageMap;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
+public class Plane extends BaseSprite implements Moveable, Drawable {
+
+    private Image image;
+    private boolean up, right, down, left;
+    private boolean fire;
+    private int speed = FrameConstant.GAME_SPEED * 3;
+    private int index = 0;
+
+    public Plane() {
+        this((FrameConstant.FRAME_WIDTH - ImageMap.getMap("my01").getWidth(null)) / 2,
+                FrameConstant.FRAME_HEIGHT - ImageMap.getMap("my01").getHeight(null),
+                ImageMap.getMap("my01"));
+    }
+
+    public Plane(int x, int y, Image image) {
+        super(x, y);
+        this.image = image;
+    }
+
+
+    @Override
+    public void draw(Graphics g) {
+        g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
+        move();
+        fire();
+        if (fire) {
+            index++;
+            if (index >= 10) {
+                index = 0;
+            }
+        }
+    }
+
+    public void fire() {
+        if (fire && index == 0) {
+            GameFrame gameFrame = DateStore.get("gameFrame");
+            gameFrame.bulletList.add(new Bullet(
+                    getX() + (image.getWidth(null) / 2 - ImageMap.getMap("mb01").getWidth(null) / 2)
+                    , getY() - (image.getHeight(null) / 2)
+                    , ImageMap.getMap("mb01")));
+        }
+    }
+
+    @Override
+    public void move() {
+        if (up) {
+            setY(getY() - speed);
+        }
+        if (right) {
+            setX(getX() + speed);
+        }
+        if (down) {
+            setY(getY() + speed);
+        }
+        if (left) {
+            setX(getX() - speed);
+        }
+        borderTesting();
+    }
+
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_W) {
+            up = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_D) {
+            right = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_S) {
+            down = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            left = true;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            fire = true;
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_W) {
+            up = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_D) {
+            right = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_S) {
+            down = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_A) {
+            left = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            fire = false;
+        }
+    }
+
+    public void borderTesting() {
+        if (getX() < 0) {
+            setX(0);
+        }
+        if (getX() > FrameConstant.FRAME_WIDTH - image.getWidth(null)) {
+            setX(FrameConstant.FRAME_WIDTH - image.getWidth(null));
+        }
+        if (getY() < 30) {
+            setY(30);
+        }
+        if (getY() > FrameConstant.FRAME_HEIGHT - image.getHeight(null)) {
+            setY(FrameConstant.FRAME_HEIGHT - image.getHeight(null));
+        }
+    }
+
+    @Override
+    public Rectangle getRectangle() {
+        return new Rectangle(getX(), getY(), image.getWidth(null), image.getHeight(null));
+    }
+}
