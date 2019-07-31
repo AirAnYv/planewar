@@ -24,7 +24,6 @@ public class GameFrame extends Frame {
 
     public final List<EnemyBullet> enemyBullets = new CopyOnWriteArrayList<>();
 
-    //private Prop blood = new Prop(30,50,ImageMap.getMap("blood"));
     public final List<Prop> props = new CopyOnWriteArrayList<>();
 
     public boolean gameOver = false;
@@ -42,6 +41,7 @@ public class GameFrame extends Frame {
             }
             for (EnemyPlane enemyPlane : enemyPlanes) {
                 enemyPlane.draw(g);
+                //System.out.println(enemyPlane);
             }
             for (EnemyBullet enemyBullet : enemyBullets) {
                 enemyBullet.draw(g);
@@ -58,9 +58,9 @@ public class GameFrame extends Frame {
             /**
              * 敌方子弹攻击我方飞机的方法  关闭后无敌
              */
-            for (EnemyBullet enemyBullet : enemyBullets) {
-                enemyBullet.collisionTesting(plane);
-            }
+//            for (EnemyBullet enemyBullet : enemyBullets) {
+//                enemyBullet.collisionTesting(plane);
+//            }
 
             /**
              * 画出道具
@@ -75,21 +75,24 @@ public class GameFrame extends Frame {
                 prop.collisionTesting(plane);
             }
 
-
         }
 
         /**
          * 绘制血条 在屏幕右上角
          */
         g.setColor(Color.red);
-        g.drawString("生命值:" ,640,68);
+        g.drawString("生命值:", 640, 68);
         g.drawRect(680, 60, 70, 10);
         g.setColor(Color.white);
-        g.drawString("蓄能:" ,640,88);
+        g.drawString("蓄能:", 640, 88);
         g.drawRect(680, 80, 70, 10);
 
+        g.setColor(Color.YELLOW);
+        g.drawString("进度:" , 733,650);
+        g.drawRect(730,660,30,200);
 
         createEnemyPlane();
+        bg.drawInfo(g);
 
 //        g.setColor(Color.red);
 //        g.drawString("" + bulletList.size(), 100, 100);
@@ -97,24 +100,24 @@ public class GameFrame extends Frame {
 
     private void createEnemyPlane() {
         boolean flag = true;   //  是否能添加
-        if (random.nextInt(1000) > 990) {
+        if (random.nextInt(1000) > 950) {
             int epX = (int) (Math.random() * 720);
-            int epY = (int) (Math.random() * 200);
-            EnemyPlane enemyPlane = new EnemyPlane(epX, epY, ImageMap.getMap("ep01"));
+            int epY = (int) (Math.random() * 50);
+            int type = random.nextInt(4) + 1;
+            EnemyPlane enemyPlane = new EnemyPlane(epX, epY, type);
             if (enemyPlanes.size() == 0) {
                 enemyPlanes.add(enemyPlane);
                 flag = false;
             } else {
                 for (EnemyPlane enemyP : enemyPlanes) {
-                    if (enemyPlane.getRectangle().intersects(enemyP.getRectangle())) {
+                    if (enemyP.getY() < 300 && enemyPlane.getRectangle().intersects(enemyP.getRectangle())) {  // 不能添加的情况
                         flag = false;
                         break;
                     }
                 }
-                if (flag) {
-                    enemyPlanes.add(enemyPlane);
-                }
-
+            }
+            if (flag) {
+                enemyPlanes.add(enemyPlane);
             }
         }
     }

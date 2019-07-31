@@ -58,7 +58,7 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
                 if(gameFrame.plane.getMagic() != 100){
                     gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
                 }
-                if (Math.random()>0.1) {
+                if (Math.random()> 0.9) {
                     gameFrame.props.add(new Prop(getX(),getY(),ImageMap.getMap("blood")));
                 }
             }

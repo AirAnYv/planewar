@@ -13,6 +13,7 @@ import java.awt.*;
 public class Prop extends BaseSprite implements Moveable, Drawable {
 
     private Image image;
+    private int speed = FrameConstant.GAME_SPEED * 3;
 
     public Prop() {
         this(0, 0, ImageMap.getMap("blood"));
@@ -25,17 +26,19 @@ public class Prop extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void draw(Graphics g) {
+        move();
+        borderTesting();
         g.drawImage(image, getX(), getY(), image.getWidth(null) / 7, image.getHeight(null) / 5, null);
     }
 
     @Override
     public void move() {
-
+        setY(getY() + speed);
     }
 
     @Override
     public Rectangle getRectangle() {
-        return new Rectangle(getX(), getY(), image.getWidth(null)/7, image.getHeight(null)/5);
+        return new Rectangle(getX(), getY(), image.getWidth(null) / 7, image.getHeight(null) / 5);
     }
 
     public void collisionTesting(Plane plane) {
@@ -47,6 +50,13 @@ public class Prop extends BaseSprite implements Moveable, Drawable {
             } else {
                 gameFrame.plane.setBlood(gameFrame.plane.getBlood() + 20);
             }
+        }
+    }
+
+    public void borderTesting() {
+        GameFrame gameFrame = DateStore.get("gameFrame");
+        if (getY() > FrameConstant.FRAME_HEIGHT) {
+            gameFrame.props.remove(this);
         }
     }
 

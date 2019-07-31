@@ -19,4 +19,6 @@ public class FrameConstant {
 
     public static final int INCREMENT_BLOOD = 20;
 
+    public static final double PROCESS = 10240.0-900;
+
 }
