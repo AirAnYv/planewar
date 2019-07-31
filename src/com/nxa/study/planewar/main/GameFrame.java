@@ -10,17 +10,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameFrame extends Frame {
 
+    private Random random = new Random(0);
     private Background bg = new Background();
-    private Plane plane = new Plane();
+    public final Plane plane = new Plane();
     public final List<Bullet> bulletList = new CopyOnWriteArrayList<>();
 
     public final List<EnemyPlane> enemyPlanes = new CopyOnWriteArrayList<>();
 
     public final List<EnemyBullet> enemyBullets = new CopyOnWriteArrayList<>();
+
+    //private Prop blood = new Prop(30,50,ImageMap.getMap("blood"));
+    public final List<Prop> props = new CopyOnWriteArrayList<>();
 
     public boolean gameOver = false;
 
@@ -42,17 +47,76 @@ public class GameFrame extends Frame {
                 enemyBullet.draw(g);
             }
 
+
+            /**
+             * 我方子弹击中敌人的方法
+             */
             for (Bullet bullet : bulletList) {
                 bullet.collisionTesting(enemyPlanes);
             }
+
+            /**
+             * 敌方子弹攻击我方飞机的方法  关闭后无敌
+             */
             for (EnemyBullet enemyBullet : enemyBullets) {
                 enemyBullet.collisionTesting(plane);
             }
+
+            /**
+             * 画出道具
+             */
+            for (Prop prop : props) {
+                prop.draw(g);
+            }
+            /**
+             * 我方吃道具的方法
+             */
+            for (Prop prop : props) {
+                prop.collisionTesting(plane);
+            }
+
+
         }
 
+        /**
+         * 绘制血条 在屏幕右上角
+         */
+        g.setColor(Color.red);
+        g.drawString("生命值:" ,640,68);
+        g.drawRect(680, 60, 70, 10);
+        g.setColor(Color.white);
+        g.drawString("蓄能:" ,640,88);
+        g.drawRect(680, 80, 70, 10);
+
+
+        createEnemyPlane();
 
 //        g.setColor(Color.red);
 //        g.drawString("" + bulletList.size(), 100, 100);
+    }
+
+    private void createEnemyPlane() {
+        boolean flag = true;   //  是否能添加
+        if (random.nextInt(1000) > 990) {
+            int epX = (int) (Math.random() * 720);
+            int epY = (int) (Math.random() * 200);
+            EnemyPlane enemyPlane = new EnemyPlane(epX, epY, ImageMap.getMap("ep01"));
+            if (enemyPlanes.size() == 0) {
+                enemyPlanes.add(enemyPlane);
+                flag = false;
+            } else {
+                for (EnemyPlane enemyP : enemyPlanes) {
+                    if (enemyPlane.getRectangle().intersects(enemyP.getRectangle())) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    enemyPlanes.add(enemyPlane);
+                }
+
+            }
+        }
     }
 
     public void init() {
@@ -90,15 +154,16 @@ public class GameFrame extends Frame {
             }
         }.start();
 
-        enemyPlanes.add(new EnemyPlane(300, 30, ImageMap.getMap("ep01")));
+        /*enemyPlanes.add(new EnemyPlane(300, 30, ImageMap.getMap("ep01")));
         enemyPlanes.add(new EnemyPlane(700, -20, ImageMap.getMap("ep01")));
         enemyPlanes.add(new EnemyPlane(20, 20, ImageMap.getMap("ep01")));
         enemyPlanes.add(new EnemyPlane(600, 10, ImageMap.getMap("ep01")));
-        enemyPlanes.add(new EnemyPlane(100, 60, ImageMap.getMap("ep01")));
+        enemyPlanes.add(new EnemyPlane(100, 60, ImageMap.getMap("ep01")));*/
 
         setVisible(true);
 
     }
+
 
     private Image offScreenImage = null;
 

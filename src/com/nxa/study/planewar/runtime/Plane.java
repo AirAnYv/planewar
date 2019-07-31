@@ -18,6 +18,25 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
     private boolean fire;
     private int speed = FrameConstant.GAME_SPEED * 3;
     private int index = 0;
+    private int blood = 100;
+    private int magic = 0;
+
+
+    public void setMagic(int magic) {
+        this.magic = magic;
+    }
+
+    public int getMagic() {
+        return magic;
+    }
+
+    public int getBlood() {
+        return blood;
+    }
+
+    public void setBlood(int blood) {
+        this.blood = blood;
+    }
 
     public Plane() {
         this((FrameConstant.FRAME_WIDTH - ImageMap.getMap("my01").getWidth(null)) / 2,
@@ -42,6 +61,14 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
                 index = 0;
             }
         }
+        drawInfo(g);
+    }
+
+    public void drawInfo(Graphics g) {
+        g.setColor(Color.red);
+        g.fillRect(FrameConstant.BLOOD_X, FrameConstant.BLOOD_Y, (int)((blood / 100.0) * FrameConstant.BLOOD_WIDTH), FrameConstant.BLOOD_HEIGHT);
+        g.setColor(Color.WHITE);
+        g.fillRect(FrameConstant.MAGIC_X, FrameConstant.MAGIC_Y, (int)((magic / 100.0) * FrameConstant.MAGIC_WIDTH), FrameConstant.MAGIC_HEIGHT);
     }
 
     public void fire() {
@@ -126,4 +153,6 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
     public Rectangle getRectangle() {
         return new Rectangle(getX(), getY(), image.getWidth(null), image.getHeight(null));
     }
+
+
 }
