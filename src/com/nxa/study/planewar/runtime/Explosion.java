@@ -12,11 +12,10 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Explosion extends BaseSprite implements Moveable, Drawable {
+public class Explosion extends BaseSprite implements  Drawable {
 
     private List<Image> expList = new ArrayList<>();
     private int index;
-    private boolean alive;
 
     public Explosion() {
         this(0, 0);
@@ -35,16 +34,12 @@ public class Explosion extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(expList.get(index++/5), getX(), getY(),  (expList.get(0).getWidth(null)),
+        g.drawImage(expList.get(index++%45/5), getX(), getY(),  (expList.get(0).getWidth(null)),
                  (expList.get(0).getHeight(null) ), null);
         GameFrame gameFrame = DateStore.get("gameFrame");
-        if (index >= 45) {
+        if (index >= 90) {
             gameFrame.explosions.remove(this);
         }
     }
 
-    @Override
-    public void move() {
-
-    }
 }

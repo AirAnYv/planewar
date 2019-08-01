@@ -48,6 +48,17 @@ public class ImageMap {
         map.put("e8", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\explosion\\e8.png"));
         map.put("e9", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\explosion\\e9.png"));
 
+
+        map.put("w1", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w1.png"));
+        map.put("w2", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w2.png"));
+        map.put("w3", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w3.png"));
+        map.put("w4", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w4.png"));
+        map.put("w5", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w5.png"));
+        map.put("w6", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w6.png"));
+        map.put("w7", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w7.png"));
+        map.put("w8", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w8.png"));
+        map.put("w9", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\warning\\w9.png"));
+
     }
 
     public static Image getMap(String key) {

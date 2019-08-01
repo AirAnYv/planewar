@@ -180,11 +180,6 @@ public class GameFrame extends Frame {
             }
         }.start();
 
-        /*enemyPlanes.add(new EnemyPlane(300, 30, ImageMap.getMap("ep01")));
-        enemyPlanes.add(new EnemyPlane(700, -20, ImageMap.getMap("ep01")));
-        enemyPlanes.add(new EnemyPlane(20, 20, ImageMap.getMap("ep01")));
-        enemyPlanes.add(new EnemyPlane(600, 10, ImageMap.getMap("ep01")));
-        enemyPlanes.add(new EnemyPlane(100, 60, ImageMap.getMap("ep01")));*/
 
         setVisible(true);
 

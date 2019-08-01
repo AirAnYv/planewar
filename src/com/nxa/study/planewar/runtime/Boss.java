@@ -3,6 +3,7 @@ package com.nxa.study.planewar.runtime;
 import com.nxa.study.planewar.base.BaseSprite;
 import com.nxa.study.planewar.base.Drawable;
 import com.nxa.study.planewar.base.Moveable;
+import com.nxa.study.planewar.constant.FrameConstant;
 import com.nxa.study.planewar.main.GameFrame;
 import com.nxa.study.planewar.util.DateStore;
 import com.nxa.study.planewar.util.ImageMap;
@@ -63,7 +64,7 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
 
     public void Appearance() {
         GameFrame gameFrame = DateStore.get("gameFrame");
-        if (gameFrame.bg.getMoveSum() > 1000 && !gameFrame.gameOver) {    // 待更改数值
+        if (gameFrame.bg.getMoveSum() > FrameConstant.BOSS_APPEARANCE && !gameFrame.gameOver) {    // 待更改数值
             setAlive(true);
         }
     }
