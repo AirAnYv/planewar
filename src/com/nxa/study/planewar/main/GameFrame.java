@@ -2,7 +2,6 @@ package com.nxa.study.planewar.main;
 
 import com.nxa.study.planewar.constant.FrameConstant;
 import com.nxa.study.planewar.runtime.*;
-import com.nxa.study.planewar.util.ImageMap;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -28,7 +27,11 @@ public class GameFrame extends Frame {
 
     public final List<Explosion> explosions = new CopyOnWriteArrayList<>();
 
-    private Boss boss = new Boss(300,400);
+    public final List<BossBullet> bossBullets = new CopyOnWriteArrayList<>();
+
+    public final Boss boss = new Boss(300, -50);
+
+    private Warning warning = new Warning(100, 400);
 
     public boolean gameOver = false;
 
@@ -65,9 +68,9 @@ public class GameFrame extends Frame {
             /**
              * 敌方子弹攻击我方飞机的方法  关闭后无敌
              */
-//            for (EnemyBullet enemyBullet : enemyBullets) {
-//                enemyBullet.collisionTesting(plane);
-//            }
+            for (EnemyBullet enemyBullet : enemyBullets) {
+                enemyBullet.collisionTesting(plane);
+            }
 
             /**
              * 我方子弹击中BOSS的方法
@@ -91,34 +94,51 @@ public class GameFrame extends Frame {
                 prop.collisionTesting(plane);
             }
 
-        }
+            /**
+             * 画出警告
+             */
+            warning.draw(g);
 
-        /**
-         * 绘制血条 在屏幕右上角
-         */
-        g.setColor(Color.red);
-        g.drawString("生命值:", 640, 68);
-        g.drawRect(680, 60, 70, 10);
-        g.setColor(Color.white);
-        g.drawString("蓄能:", 640, 88);
-        g.drawRect(680, 80, 70, 10);
+            /**
+             * 绘制血条 在屏幕右上角
+             */
+            g.setColor(Color.red);
+            g.drawString("生命值:", 640, 68);
+            g.drawRect(680, 60, 70, 10);
+            g.setColor(Color.white);
+            g.drawString("蓄能:", 640, 88);
+            g.drawRect(680, 80, 70, 10);
 
-        g.setColor(Color.YELLOW);
-        g.drawString("进度:" , 733,650);
-        g.drawRect(730,660,30,200);
-
-
-        createEnemyPlane();
-        bg.drawInfo(g);
-
-        g.setColor(Color.red);
-        g.fillRect(730,780,32,2);
+            g.setColor(Color.YELLOW);
+            g.drawString("进度:", 733, 650);
+            g.drawRect(730, 660, 30, 200);
 
 
-        boss.draw(g);
+            createEnemyPlane();
+            bg.drawInfo(g);
+
+            g.setColor(Color.red);
+            g.fillRect(730, 780, 32, 2);
+
+
+            for (BossBullet bossBullet : bossBullets) {
+                bossBullet.draw(g);
+            }
+            /**
+             * boss 子弹攻击我的方法
+             */
+            for (BossBullet bossBullet : bossBullets) {
+                bossBullet.collisionTesting(plane);
+            }
+            boss.draw(g);
+
 
 //        g.setColor(Color.red);
 //        g.drawString("" + bulletList.size(), 100, 100);
+
+        }
+
+
     }
 
     private void createEnemyPlane() {

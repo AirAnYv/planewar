@@ -11,6 +11,7 @@ import com.nxa.study.planewar.util.ImageMap;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Boss extends BaseSprite implements Moveable, Drawable {
 
@@ -18,6 +19,11 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
     private int index = 0;
     private boolean alive = false;
     private int blood = 1000;
+    private int speed = FrameConstant.GAME_SPEED * 2;
+    private boolean right = true;
+    private boolean attack = false;
+    private int timer;
+    private Random random = new Random();
 
     public int getBlood() {
         return blood;
@@ -52,11 +58,17 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void draw(Graphics g) {
+
         if (alive) {
             g.drawImage(imageList.get(index++ / 5), getX(), getY(), (int) (imageList.get(0).getWidth(null) / 1.5),
                     (int) (imageList.get(0).getHeight(null) / 1.5), null);
             if (index >= 45) {
                 index = 0;
+            }
+            fire();
+            move();
+            if (Math.random() > 0.99 && !attack) {
+                attack = true;
             }
         }
         Appearance();
@@ -77,6 +89,75 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void move() {
+        if (getY() < 150) {
+            setY(getY() + speed);
+        }
+        if (!attack) {
+            //  BOSS不攻击移动的方法
+            if (right && getY() >= 50) {
+                setX(getX() + speed);
+            }
+            if (!right && getY() >= 50) {
+                setX(getX() - speed);
+            }
+            if (getY() > 200) {
+                setY(getY() - speed);
+            }
+        } else {
+            // BOSS 主动攻击的移动方法
+            setY(getY() + speed * 2);
 
+        }
+        borderTesting();
+    }
+
+    private void borderTesting() {
+        if (!attack) {
+            // BOSS不攻击的移动监测
+            if (getX() < 0) {
+                right = true;
+            } else if (getX() + (int) (imageList.get(0).getWidth(null) / 1.5) > FrameConstant.FRAME_WIDTH) {
+                right = false;
+            }
+
+        } else {
+            // BOSS主动攻击的移动监测
+            if (getY() >= 600) {
+                setY(600);
+                if (timer == 0) {
+                    skill();
+                }
+                timer++;
+                if (timer > 180) {
+                    attack = false;
+                    timer = 0;
+                }
+            }
+        }
+    }
+
+    public void fire() {
+        GameFrame gameFrame = DateStore.get("gameFrame");
+        if (random.nextInt(1000) > 985) {
+            boolean direciton = (getX() + (int) (imageList.get(0).getWidth(null) / 1.5)) > FrameConstant.FRAME_WIDTH / 2 ? true : false;
+            // 增加普通打击方法
+            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 - 75),
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) - 50, 1, direciton));
+            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 - 38),
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) - 25, 1, direciton));
+            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5),
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5), 1, direciton));
+            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 + 38),
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) + 25, 1, direciton));
+            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 + 75),
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) + 50, 1, direciton));
+        }
+    }
+
+    public void skill() {
+        GameFrame gameFrame = DateStore.get("gameFrame");
+        gameFrame.bossBullets.add(new BossBullet(getX() + (imageList.get(0).getWidth(null) / 2) -
+                ImageMap.getMap("bb01").getWidth(null) / 2 - 50,
+                getY() + (imageList.get(0).getHeight(null) / 2), 2, true));
     }
 }

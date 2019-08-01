@@ -38,6 +38,13 @@ public class ImageMap {
         map.put("boss09", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_09.png"));
 
 
+        map.put("bb01", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\bossbullet\\01.png"));
+        map.put("bb02", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\bossbullet\\02.png"));
+        map.put("bb03", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\bossbullet\\03.png"));
+        map.put("bb04", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\bossbullet\\04.png"));
+        map.put("bb05", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\bossbullet\\05.png"));
+
+
         map.put("e1", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\explosion\\e1.png"));
         map.put("e2", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\explosion\\e2.png"));
         map.put("e3", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\explosion\\e3.png"));

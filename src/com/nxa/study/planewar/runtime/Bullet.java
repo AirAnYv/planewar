@@ -87,15 +87,14 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
             for (EnemyPlane enemyPlane : enemyPlaneList) {
                 if (enemyPlane.getRectangle().intersects(this.getRectangle())) {
                     count++;
-                    if (count >= 50) {
+                    if (count >= 80) {
                         gameFrame.explosions.add(new Explosion(getX(), getY()));
                         gameFrame.enemyPlanes.remove(enemyPlane);
                         gameFrame.bulletList.remove(this);
-                    }
+                }
                 }
             }
         }
-
     }
 
     public void collisionTesting(Boss boss) {
@@ -113,10 +112,6 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
                 boss.setAlive(false);
                 gameFrame.gameOver = true;
             }
-        } else if (type == 2) {
-
         }
-
-
     }
 }
