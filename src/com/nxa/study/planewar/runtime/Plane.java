@@ -66,9 +66,9 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
 
     public void drawInfo(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect(FrameConstant.BLOOD_X, FrameConstant.BLOOD_Y, (int)((blood / 100.0) * FrameConstant.BLOOD_WIDTH), FrameConstant.BLOOD_HEIGHT);
+        g.fillRect(FrameConstant.BLOOD_X, FrameConstant.BLOOD_Y, (int) ((blood / 100.0) * FrameConstant.BLOOD_WIDTH), FrameConstant.BLOOD_HEIGHT);
         g.setColor(Color.WHITE);
-        g.fillRect(FrameConstant.MAGIC_X, FrameConstant.MAGIC_Y, (int)((magic / 100.0) * FrameConstant.MAGIC_WIDTH), FrameConstant.MAGIC_HEIGHT);
+        g.fillRect(FrameConstant.MAGIC_X, FrameConstant.MAGIC_Y, (int) ((magic / 100.0) * FrameConstant.MAGIC_WIDTH), FrameConstant.MAGIC_HEIGHT);
     }
 
     public void fire() {
@@ -148,6 +148,7 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
             setY(FrameConstant.FRAME_HEIGHT - image.getHeight(null));
         }
     }
+
 
     @Override
     public Rectangle getRectangle() {

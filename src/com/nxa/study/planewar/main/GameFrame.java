@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameFrame extends Frame {
 
     private Random random = new Random(0);
-    private Background bg = new Background();
+    public final Background bg = new Background();
     public final Plane plane = new Plane();
     public final List<Bullet> bulletList = new CopyOnWriteArrayList<>();
 
@@ -25,6 +25,8 @@ public class GameFrame extends Frame {
     public final List<EnemyBullet> enemyBullets = new CopyOnWriteArrayList<>();
 
     public final List<Prop> props = new CopyOnWriteArrayList<>();
+
+    private Boss boss = new Boss(300,400);
 
     public boolean gameOver = false;
 
@@ -39,14 +41,12 @@ public class GameFrame extends Frame {
             for (Bullet bullet : bulletList) {
                 bullet.draw(g);
             }
-            for (EnemyPlane enemyPlane : enemyPlanes) {
-                enemyPlane.draw(g);
-                //System.out.println(enemyPlane);
-            }
             for (EnemyBullet enemyBullet : enemyBullets) {
                 enemyBullet.draw(g);
             }
-
+            for (EnemyPlane enemyPlane : enemyPlanes) {
+                enemyPlane.draw(g);
+            }
 
             /**
              * 我方子弹击中敌人的方法
@@ -61,6 +61,16 @@ public class GameFrame extends Frame {
 //            for (EnemyBullet enemyBullet : enemyBullets) {
 //                enemyBullet.collisionTesting(plane);
 //            }
+
+            /**
+             * 我方子弹击中BOSS的方法
+             */
+            if (boss.isAlive()) {
+                for (Bullet bullet : bulletList) {
+                    bullet.collisionTesting(boss);
+                }
+            }
+
 
             /**
              * 画出道具
@@ -91,8 +101,15 @@ public class GameFrame extends Frame {
         g.drawString("进度:" , 733,650);
         g.drawRect(730,660,30,200);
 
+
         createEnemyPlane();
         bg.drawInfo(g);
+
+        g.setColor(Color.red);
+        g.fillRect(730,780,32,2);
+
+
+        boss.draw(g);
 
 //        g.setColor(Color.red);
 //        g.drawString("" + bulletList.size(), 100, 100);
@@ -100,7 +117,7 @@ public class GameFrame extends Frame {
 
     private void createEnemyPlane() {
         boolean flag = true;   //  是否能添加
-        if (random.nextInt(1000) > 950) {
+        if (random.nextInt(1000) > 985) {
             int epX = (int) (Math.random() * 720);
             int epY = (int) (Math.random() * 50);
             int type = random.nextInt(4) + 1;

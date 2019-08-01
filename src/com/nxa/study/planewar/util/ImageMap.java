@@ -26,6 +26,17 @@ public class ImageMap {
         map.put("blood", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\prop\\blood.png"));
 
 
+        map.put("boss01", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_01.png"));
+        map.put("boss02", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_02.png"));
+        map.put("boss03", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_03.png"));
+        map.put("boss04", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_04.png"));
+        map.put("boss05", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_05.png"));
+        map.put("boss06", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_06.png"));
+        map.put("boss07", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_07.png"));
+        map.put("boss08", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_08.png"));
+        map.put("boss09", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\boss\\boss_A_09.png"));
+
+
     }
 
     public static Image getMap(String key) {

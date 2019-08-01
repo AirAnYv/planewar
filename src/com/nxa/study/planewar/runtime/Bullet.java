@@ -55,13 +55,29 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
             if (enemyPlane.getRectangle().intersects(this.getRectangle())) {
                 gameFrame.enemyPlanes.remove(enemyPlane);
                 gameFrame.bulletList.remove(this);
-                if(gameFrame.plane.getMagic() != 100){
+                if (gameFrame.plane.getMagic() != 100) {
                     gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
                 }
-                if (Math.random()> 0.9) {
-                    gameFrame.props.add(new Prop(getX(),getY(),ImageMap.getMap("blood")));
+                if (Math.random() > 0.9) {
+                    gameFrame.props.add(new Prop(getX(), getY(), ImageMap.getMap("blood")));
                 }
             }
+        }
+    }
+
+    public void collisionTesting(Boss boss) {
+        GameFrame gameFrame = DateStore.get("gameFrame");
+        if (this.getRectangle().intersects(boss.getRectangle())) {
+            boss.setBlood(boss.getBlood() - 100);
+            gameFrame.bulletList.remove(this);
+            System.out.println(boss.getBlood());
+            if (gameFrame.plane.getMagic() != 100) {
+                gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
+            }
+        }
+        if (boss.getBlood() <= 0) {
+            boss.setAlive(false);
+            gameFrame.gameOver = true;
         }
     }
 }
