@@ -11,7 +11,6 @@ import com.nxa.study.planewar.util.ImageMap;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BossBullet extends BaseSprite implements Drawable, Moveable {
 
@@ -19,17 +18,17 @@ public class BossBullet extends BaseSprite implements Drawable, Moveable {
     private int index = 0;
     private int type;
     private int speed = FrameConstant.GAME_SPEED * 5;
-    private double angle;
-    private boolean direction; // false 向左 true 向右
+    private int angle;
+
 
     public BossBullet() {
-        this(0, 0, 1, false);
+        this(0, 0, 1, 0);
     }
 
-    public BossBullet(int x, int y, int type, boolean direction) {
+    public BossBullet(int x, int y, int type, int angle) {
         super(x, y);
         this.type = type;
-        this.direction = direction;
+        this.angle = angle;
         init();
     }
 
@@ -57,23 +56,13 @@ public class BossBullet extends BaseSprite implements Drawable, Moveable {
                 gameFrame.bossBullets.remove(this);
             }
         }
-
     }
 
     @Override
     public void move() {
-        GameFrame gameFrame = DateStore.get("gameFrame");
         if (type == 1) {
-            // 错误
-            int x = gameFrame.plane.getX();
-            int y = gameFrame.plane.getY();
-            angle = Math.acos(Math.abs(getX() - x) / Math.sqrt(Math.pow(Math.abs(getX() - x), 2) + Math.pow(Math.abs(getY() - y), 2)));
-            if (direction) {
-                setX((int) (getX() + speed * Math.cos(speed)));
-            } else {
-                setX((int) (getX() - speed * Math.cos(speed)));
-            }
-            setY((int) (getY() - speed * Math.sin(speed)));   ///待检测 普通子弹运动方法
+            setX(getX() + (int) (Math.cos(Math.toRadians(angle)) * speed));
+            setY(getY() + (int) (Math.sin(Math.toRadians(angle)) * speed));
         }
     }
 

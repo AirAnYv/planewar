@@ -68,9 +68,9 @@ public class GameFrame extends Frame {
             /**
              * 敌方子弹攻击我方飞机的方法  关闭后无敌
              */
-            for (EnemyBullet enemyBullet : enemyBullets) {
-                enemyBullet.collisionTesting(plane);
-            }
+//            for (EnemyBullet enemyBullet : enemyBullets) {
+//                enemyBullet.collisionTesting(plane);
+//            }
 
             /**
              * 我方子弹击中BOSS的方法
@@ -127,9 +127,9 @@ public class GameFrame extends Frame {
             /**
              * boss 子弹攻击我的方法
              */
-            for (BossBullet bossBullet : bossBullets) {
-                bossBullet.collisionTesting(plane);
-            }
+//            for (BossBullet bossBullet : bossBullets) {
+//                bossBullet.collisionTesting(plane);
+//            }
             boss.draw(g);
 
 

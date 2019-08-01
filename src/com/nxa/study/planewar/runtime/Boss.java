@@ -23,7 +23,8 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
     private boolean right = true;
     private boolean attack = false;
     private int timer;
-    private Random random = new Random();
+    private int angle = 0;
+    private int fireIndex;
 
     public int getBlood() {
         return blood;
@@ -58,17 +59,20 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void draw(Graphics g) {
-
         if (alive) {
+            g.drawRect(30, 70, 200, 20);
+            g.fillRect(30, 70, (int) (getBlood() / 1000.0 * 200), 20);
+            g.setColor(Color.WHITE);
+            g.drawString("血量: " + getBlood(), 50, 85);
+            fire();
+            move();
+            if (Math.random() > 0.998 && !attack) {
+                attack = true;
+            }
             g.drawImage(imageList.get(index++ / 5), getX(), getY(), (int) (imageList.get(0).getWidth(null) / 1.5),
                     (int) (imageList.get(0).getHeight(null) / 1.5), null);
             if (index >= 45) {
                 index = 0;
-            }
-            fire();
-            move();
-            if (Math.random() > 0.99 && !attack) {
-                attack = true;
             }
         }
         Appearance();
@@ -137,20 +141,16 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
     }
 
     public void fire() {
+        angle = (30 + angle) % 360;
         GameFrame gameFrame = DateStore.get("gameFrame");
-        if (random.nextInt(1000) > 985) {
-            boolean direciton = (getX() + (int) (imageList.get(0).getWidth(null) / 1.5)) > FrameConstant.FRAME_WIDTH / 2 ? true : false;
+        fireIndex++;
+        if (fireIndex == 10) {
             // 增加普通打击方法
             gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 - 75),
-                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) - 50, 1, direciton));
-            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 - 38),
-                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) - 25, 1, direciton));
-            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5),
-                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5), 1, direciton));
-            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 + 38),
-                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) + 25, 1, direciton));
-            gameFrame.bossBullets.add(new BossBullet(getX() + (int) (imageList.get(0).getWidth(null) / 1.5 + 75),
-                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) + 50, 1, direciton));
+                    getY() + (int) (imageList.get(0).getHeight(null) / 1.5) - 50, 1, angle));
+        }
+        if (fireIndex > 10) {
+            fireIndex = 0;
         }
     }
 
@@ -158,6 +158,6 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
         GameFrame gameFrame = DateStore.get("gameFrame");
         gameFrame.bossBullets.add(new BossBullet(getX() + (imageList.get(0).getWidth(null) / 2) -
                 ImageMap.getMap("bb01").getWidth(null) / 2 - 50,
-                getY() + (imageList.get(0).getHeight(null) / 2), 2, true));
+                getY() + (imageList.get(0).getHeight(null) / 2), 2, 0));
     }
 }

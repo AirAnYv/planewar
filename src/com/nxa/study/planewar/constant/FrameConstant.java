@@ -21,6 +21,7 @@ public class FrameConstant {
 
     public static final double PROCESS = 10240.0-900;
 
-    public static final double BOSS_APPEARANCE = 5000;
+    public static final double BOSS_APPEARANCE = 6000;
+    //public static final double BOSS_APPEARANCE = 800;
 
 }
