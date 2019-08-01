@@ -19,7 +19,8 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
     private int speed = FrameConstant.GAME_SPEED * 3;
     private int index = 0;
     private int blood = 100;
-    private int magic = 0;
+    private int magic = 90;
+    private boolean skill;
 
 
     public void setMagic(int magic) {
@@ -55,7 +56,8 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
         move();
         fire();
-        if (fire) {
+        skill();
+        if (fire) { // 控制开火速度
             index++;
             if (index >= 10) {
                 index = 0;
@@ -77,7 +79,22 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
             gameFrame.bulletList.add(new Bullet(
                     getX() + (image.getWidth(null) / 2 - ImageMap.getMap("mb01").getWidth(null) / 2)
                     , getY() - (image.getHeight(null) / 2)
-                    , ImageMap.getMap("mb01")));
+                    , 1));
+        }
+    }
+
+    public void skill() {
+        GameFrame gameFrame = DateStore.get("gameFrame");
+        if (skill && getMagic() == 100) {
+            for (EnemyPlane enemyPlane : gameFrame.enemyPlanes) {
+                gameFrame.bulletList.add(new Bullet(
+                        enemyPlane.getX() + (enemyPlane.getImage().getWidth(null) / 2 - ImageMap.getMap("target").getWidth(null) / 2)
+                        , enemyPlane.getY() + enemyPlane.getImage().getHeight(null) / 2 - ImageMap.getMap("target").getHeight(null) / 2
+                        , 2)
+                );
+            }
+            // 待写没有能量
+            setMagic(90);
         }
     }
 
@@ -114,6 +131,9 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         if (e.getKeyCode() == KeyEvent.VK_J) {
             fire = true;
         }
+        if (e.getKeyCode() == KeyEvent.VK_K) {
+            skill = true;
+        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -131,6 +151,9 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         }
         if (e.getKeyCode() == KeyEvent.VK_J) {
             fire = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_K) {
+            skill = false;
         }
     }
 

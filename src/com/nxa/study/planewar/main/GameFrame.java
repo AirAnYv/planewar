@@ -26,6 +26,8 @@ public class GameFrame extends Frame {
 
     public final List<Prop> props = new CopyOnWriteArrayList<>();
 
+    public final List<Explosion> explosions = new CopyOnWriteArrayList<>();
+
     private Boss boss = new Boss(300,400);
 
     public boolean gameOver = false;
@@ -37,17 +39,22 @@ public class GameFrame extends Frame {
     public void paint(Graphics g) {
         if (!gameOver) {
             bg.draw(g);
-            plane.draw(g);
-            for (Bullet bullet : bulletList) {
-                bullet.draw(g);
-            }
             for (EnemyBullet enemyBullet : enemyBullets) {
                 enemyBullet.draw(g);
             }
             for (EnemyPlane enemyPlane : enemyPlanes) {
                 enemyPlane.draw(g);
             }
-
+            for (Bullet bullet : bulletList) {
+                bullet.draw(g);
+            }
+            /**
+             * 画出爆炸
+             */
+            for (Explosion explosion : explosions) {
+                explosion.draw(g);
+            }
+            plane.draw(g);
             /**
              * 我方子弹击中敌人的方法
              */
@@ -70,7 +77,6 @@ public class GameFrame extends Frame {
                     bullet.collisionTesting(boss);
                 }
             }
-
 
             /**
              * 画出道具

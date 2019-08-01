@@ -17,6 +17,10 @@ public class EnemyPlane extends BaseSprite implements Moveable, Drawable {
     private int speed = FrameConstant.GAME_SPEED * 3;
     Random random = new Random();
 
+    public Image getImage() {
+        return image;
+    }
+
     private int type;
 
     public int getType() {

@@ -15,14 +15,28 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
 
     private Image image;
     private int speed = FrameConstant.GAME_SPEED * 5;
+    private int type;
+
+
+    private int count;
 
     public Bullet() {
-        this(0, 0, ImageMap.getMap("mb01"));
+        this(0, 0, 1);
     }
 
-    public Bullet(int x, int y, Image image) {
+    public Bullet(int x, int y, int type) {
         super(x, y);
-        this.image = image;
+        this.type = type;
+        this.count = 0;  // 子弹存活回合
+        init();
+    }
+
+    private void init() {
+        if (type == 1) {
+            image = ImageMap.getMap("mb01");
+        } else if (type == 2) {
+            image = ImageMap.getMap("target");
+        }
     }
 
     @Override
@@ -34,7 +48,12 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
 
     @Override
     public void move() {
-        setY(getY() - speed);
+        if (type == 1) {
+            setY(getY() - speed);
+        } else if (type == 2) {
+            setY(getY() + FrameConstant.GAME_SPEED * 3);
+        }
+
     }
 
     public void borderTesting() {
@@ -51,33 +70,53 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
 
     public void collisionTesting(List<EnemyPlane> enemyPlaneList) {
         GameFrame gameFrame = DateStore.get("gameFrame");
-        for (EnemyPlane enemyPlane : enemyPlaneList) {
-            if (enemyPlane.getRectangle().intersects(this.getRectangle())) {
-                gameFrame.enemyPlanes.remove(enemyPlane);
-                gameFrame.bulletList.remove(this);
-                if (gameFrame.plane.getMagic() != 100) {
-                    gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
+        if (type == 1) {
+            for (EnemyPlane enemyPlane : enemyPlaneList) {
+                if (enemyPlane.getRectangle().intersects(this.getRectangle())) {
+                    gameFrame.enemyPlanes.remove(enemyPlane);
+                    gameFrame.bulletList.remove(this);
+                    if (gameFrame.plane.getMagic() != 100) {
+                        gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
+                    }
+                    if (Math.random() > 0.9) {
+                        gameFrame.props.add(new Prop(getX(), getY(), ImageMap.getMap("blood")));
+                    }
                 }
-                if (Math.random() > 0.9) {
-                    gameFrame.props.add(new Prop(getX(), getY(), ImageMap.getMap("blood")));
+            }
+        } else if (type == 2) {
+            for (EnemyPlane enemyPlane : enemyPlaneList) {
+                if (enemyPlane.getRectangle().intersects(this.getRectangle())) {
+                    count++;
+                    if (count >= 50) {
+                        gameFrame.explosions.add(new Explosion(getX(), getY()));
+                        gameFrame.enemyPlanes.remove(enemyPlane);
+                        gameFrame.bulletList.remove(this);
+                    }
                 }
             }
         }
+
     }
 
     public void collisionTesting(Boss boss) {
         GameFrame gameFrame = DateStore.get("gameFrame");
-        if (this.getRectangle().intersects(boss.getRectangle())) {
-            boss.setBlood(boss.getBlood() - 100);
-            gameFrame.bulletList.remove(this);
-            System.out.println(boss.getBlood());
-            if (gameFrame.plane.getMagic() != 100) {
-                gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
+        if (type == 1) {
+            if (this.getRectangle().intersects(boss.getRectangle())) {
+                boss.setBlood(boss.getBlood() - 100);
+                gameFrame.bulletList.remove(this);
+                System.out.println(boss.getBlood());
+                if (gameFrame.plane.getMagic() != 100) {
+                    gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
+                }
             }
+            if (boss.getBlood() <= 0) {
+                boss.setAlive(false);
+                gameFrame.gameOver = true;
+            }
+        } else if (type == 2) {
+
         }
-        if (boss.getBlood() <= 0) {
-            boss.setAlive(false);
-            gameFrame.gameOver = true;
-        }
+
+
     }
 }
