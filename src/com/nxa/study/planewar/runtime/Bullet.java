@@ -103,7 +103,6 @@ public class Bullet extends BaseSprite implements Moveable, Drawable {
             if (this.getRectangle().intersects(boss.getRectangle())) {
                 boss.setBlood(boss.getBlood() - 100);
                 gameFrame.bulletList.remove(this);
-                System.out.println(boss.getBlood());
                 if (gameFrame.plane.getMagic() != 100) {
                     gameFrame.plane.setMagic(gameFrame.plane.getMagic() + 10);
                 }

@@ -33,6 +33,8 @@ public class GameFrame extends Frame {
 
     private Warning warning = new Warning(100, 400);
 
+    private GameStatus gameStatus = new GameStatus(210, 400);
+
     public boolean gameOver = false;
 
     public GameFrame() throws HeadlessException {
@@ -114,6 +116,13 @@ public class GameFrame extends Frame {
             g.drawRect(730, 660, 30, 200);
 
 
+            /**
+             *  boss没有死 但是地图结束的方法
+             */
+            if (bg.getMoveSum() > FrameConstant.MAP_OVER) {
+                gameOver = true;
+            }
+
             createEnemyPlane();
             bg.drawInfo(g);
 
@@ -132,10 +141,18 @@ public class GameFrame extends Frame {
 //            }
             boss.draw(g);
 
-
 //        g.setColor(Color.red);
 //        g.drawString("" + bulletList.size(), 100, 100);
 
+        } else {
+            if (boss.isAlive() || bg.getMoveSum() < FrameConstant.BOSS_APPEARANCE) {
+                // 你输了
+                gameStatus.draw(g);
+
+            } else {
+                // 你赢了
+                gameStatus.draw(g);
+            }
         }
 
 

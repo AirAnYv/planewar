@@ -11,7 +11,6 @@ import com.nxa.study.planewar.util.ImageMap;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Boss extends BaseSprite implements Moveable, Drawable {
 
