@@ -79,7 +79,7 @@ public class Boss extends BaseSprite implements Moveable, Drawable {
 
     public void Appearance() {
         GameFrame gameFrame = DateStore.get("gameFrame");
-        if (gameFrame.bg.getMoveSum() > FrameConstant.BOSS_APPEARANCE && !gameFrame.gameOver) {    // 待更改数值
+        if (gameFrame.bg.getMoveSum() > FrameConstant.BOSS_APPEARANCE && !gameFrame.gameOver) {
             setAlive(true);
         }
     }

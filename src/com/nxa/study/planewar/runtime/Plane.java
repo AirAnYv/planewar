@@ -19,7 +19,7 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
     private int speed = FrameConstant.GAME_SPEED * 3;
     private int index = 0;
     private int blood = 100;
-    private int magic = 90;
+    private int magic = 0;
     private boolean skill;
 
 
@@ -94,7 +94,7 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
                 );
             }
             // 待写没有能量
-            setMagic(90);
+            setMagic(0);
         }
     }
 

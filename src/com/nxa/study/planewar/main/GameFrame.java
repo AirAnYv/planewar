@@ -2,12 +2,10 @@ package com.nxa.study.planewar.main;
 
 import com.nxa.study.planewar.constant.FrameConstant;
 import com.nxa.study.planewar.runtime.*;
+import com.nxa.study.planewar.util.ImageMap;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -35,14 +33,17 @@ public class GameFrame extends Frame {
 
     private GameStatus gameStatus = new GameStatus(210, 400);
 
-    public boolean gameOver = false;
+    public boolean gameOver = true;  // 一开始给游戏为不开局
+    public int game = 5;    // 一开始为准备阶段
 
     public GameFrame() throws HeadlessException {
+
     }
 
     @Override
     public void paint(Graphics g) {
         if (!gameOver) {
+            // 游戏开始
             bg.draw(g);
             for (EnemyBullet enemyBullet : enemyBullets) {
                 enemyBullet.draw(g);
@@ -145,14 +146,40 @@ public class GameFrame extends Frame {
 //        g.drawString("" + bulletList.size(), 100, 100);
 
         } else {
-            if (boss.isAlive() || bg.getMoveSum() < FrameConstant.BOSS_APPEARANCE) {
+            if (game == 1) {
+                // 游戏准备阶段
+                bg.setMoveSum(0);
+                bg.setY(FrameConstant.FRAME_HEIGHT - ImageMap.getMap("bg01").getHeight(null));
+                enemyBullets.clear();
+                enemyPlanes.clear();
+                plane.setMagic(0);
+                plane.setBlood(100);
+                boss.setAlive(false);
+                bossBullets.clear();
+                plane.setX((FrameConstant.FRAME_WIDTH - ImageMap.getMap("my01").getWidth(null)) / 2);
+                plane.setY(FrameConstant.FRAME_HEIGHT - ImageMap.getMap("my01").getHeight(null));
+            } else if (boss.isAlive() && bg.getMoveSum() > FrameConstant.PROCESS) {
+                // 游戏结束 但是 boss存活 走过的路程大于总路程  时间超时
                 // 你输了
-                gameStatus.draw(g);
+                game = 3;
+                gameStatus.setType(game);
+            } else if (!boss.isAlive() && bg.getMoveSum() < FrameConstant.BOSS_APPEARANCE && game == 2) {
+                // BOSS没出现 就被敌机打死  输了
+                gameStatus.setType(4);
+            } else if (boss.isAlive() && bg.getMoveSum() < FrameConstant.BOSS_APPEARANCE) {
+                //  BOSS活着  但是游戏还在继续 就死了 说明是被BOSS关被打死
+                //  输了
+                game = 4;
+                gameStatus.setType(4);
+            } else if (!boss.isAlive() && bg.getMoveSum() > FrameConstant.BOSS_APPEARANCE) {
+                // BOSS死了  BOSS出现过
+                // 赢了
+                game = 2;
+                gameStatus.setType(game);
+            } else if (game == 5) {
 
-            } else {
-                // 你赢了
-                gameStatus.draw(g);
             }
+            gameStatus.draw(g);
         }
 
 
@@ -203,6 +230,14 @@ public class GameFrame extends Frame {
                 plane.keyReleased(e);
             }
         });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // 点击开始
+                game = 1;
+                gameStatus.setType(game);
+            }
+        });
         new Thread() {
             @Override
             public void run() {
@@ -216,10 +251,7 @@ public class GameFrame extends Frame {
                 }
             }
         }.start();
-
-
         setVisible(true);
-
     }
 
 
