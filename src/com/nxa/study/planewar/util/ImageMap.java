@@ -144,6 +144,9 @@ public class ImageMap {
         map.put("gr16", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\gamestatus\\gameready\\gr16.png"));
         map.put("gr17", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\gamestatus\\gameready\\gr17.png"));
 
+
+        map.put("start", ImageUtil.getImage("com\\nxa\\study\\planewar\\images\\gamestatus\\start.png"));
+
     }
 
     public static Image getMap(String key) {

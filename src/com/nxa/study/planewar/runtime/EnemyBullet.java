@@ -50,10 +50,15 @@ public class EnemyBullet extends BaseSprite implements Moveable, Drawable {
     public void collisionTesting(Plane plane) {
         GameFrame gameFrame = DateStore.get("gameFrame");
         if (plane.getRectangle().intersects(this.getRectangle())) {
-            gameFrame.enemyBullets.remove(this);
-            gameFrame.plane.setBlood(gameFrame.plane.getBlood() - 10);
-            if (gameFrame.plane.getBlood() == 0) {
-                gameFrame.gameOver = true;
+            if (plane.isDodge()) {
+                // 闪避打开
+            } else {
+                // 闪避关闭时
+                gameFrame.enemyBullets.remove(this);
+                gameFrame.plane.setBlood(gameFrame.plane.getBlood() - 10);
+                if (gameFrame.plane.getBlood() <= 0) {
+                    gameFrame.gameOver = true;
+                }
             }
         }
     }

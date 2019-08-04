@@ -4,8 +4,17 @@ import com.nxa.study.planewar.constant.FrameConstant;
 import com.nxa.study.planewar.runtime.*;
 import com.nxa.study.planewar.util.ImageMap;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.HeadlessException;
+import java.awt.event.WindowEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,6 +42,8 @@ public class GameFrame extends Frame {
 
     private GameStatus gameStatus = new GameStatus(210, 400);
 
+    private int start = 1;
+
     public boolean gameOver = true;  // 一开始给游戏为不开局
     public int game = 5;    // 一开始为准备阶段
 
@@ -42,6 +53,7 @@ public class GameFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
+        g.clearRect(0, 0, FrameConstant.FRAME_WIDTH, FrameConstant.FRAME_HEIGHT);  // 清楚上一帧图片
         if (!gameOver) {
             // 游戏开始
             bg.draw(g);
@@ -137,9 +149,9 @@ public class GameFrame extends Frame {
             /**
              * boss 子弹攻击我的方法
              */
-//            for (BossBullet bossBullet : bossBullets) {
-//                bossBullet.collisionTesting(plane);
-//            }
+            for (BossBullet bossBullet : bossBullets) {
+                bossBullet.collisionTesting(plane);
+            }
             boss.draw(g);
 
 //        g.setColor(Color.red);
@@ -152,6 +164,7 @@ public class GameFrame extends Frame {
                 bg.setY(FrameConstant.FRAME_HEIGHT - ImageMap.getMap("bg01").getHeight(null));
                 enemyBullets.clear();
                 enemyPlanes.clear();
+                bulletList.clear();
                 plane.setMagic(0);
                 plane.setBlood(100);
                 boss.setAlive(false);
@@ -177,7 +190,11 @@ public class GameFrame extends Frame {
                 game = 2;
                 gameStatus.setType(game);
             } else if (game == 5) {
-
+                if (start == 1) {
+                    g.drawImage(ImageMap.getMap("start"), 0, 0, FrameConstant.FRAME_WIDTH, FrameConstant.FRAME_HEIGHT, null);
+                }
+            } else if(game == 6){
+                bg.draw(g);
             }
             gameStatus.draw(g);
         }
@@ -220,6 +237,7 @@ public class GameFrame extends Frame {
         });
         enableInputMethods(false);
         addKeyListener(new KeyAdapter() {
+
             @Override
             public void keyPressed(KeyEvent e) {
                 plane.keyPressed(e);
@@ -229,6 +247,8 @@ public class GameFrame extends Frame {
             public void keyReleased(KeyEvent e) {
                 plane.keyReleased(e);
             }
+
+
         });
         addMouseListener(new MouseAdapter() {
             @Override
@@ -257,6 +277,7 @@ public class GameFrame extends Frame {
 
     private Image offScreenImage = null;
 
+
     @Override
     public void update(Graphics g) {
         if (offScreenImage == null) {
@@ -266,4 +287,6 @@ public class GameFrame extends Frame {
         paint(gOff);
         g.drawImage(offScreenImage, 0, 0, null);
     }
+
+
 }

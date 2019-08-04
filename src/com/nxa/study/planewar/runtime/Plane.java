@@ -14,13 +14,18 @@ import java.awt.event.KeyEvent;
 public class Plane extends BaseSprite implements Moveable, Drawable {
 
     private Image image;
+    private Image leftImage;
+    private Image rightImage;
     private boolean up, right, down, left;
+    private boolean lastTime;  // false 向左  true 向右
     private boolean fire;
     private int speed = FrameConstant.GAME_SPEED * 3;
     private int index = 0;
     private int blood = 100;
     private int magic = 0;
     private boolean skill;
+    private boolean dodge;
+    private int dodgeIndex;
 
 
     public void setMagic(int magic) {
@@ -48,12 +53,40 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
     public Plane(int x, int y, Image image) {
         super(x, y);
         this.image = image;
+        leftImage = ImageMap.getMap("left");
+        rightImage = ImageMap.getMap("right");
     }
 
+    public boolean isDodge() {
+        return dodge;
+    }
+
+    public void setDodge(boolean dodge) {
+        this.dodge = dodge;
+    }
+
+    private void dodgeDraw(Graphics g) {
+        if (dodge && right) {
+            // 向右闪避
+            g.drawImage(rightImage, getX(), getY(), rightImage.getWidth(null), rightImage.getHeight(null), null);
+        } else if (dodge && left) {
+            // 向右闪避
+            g.drawImage(leftImage, getX(), getY(), leftImage.getWidth(null), leftImage.getHeight(null), null);
+        } else if (dodge && lastTime) {
+            //  闪避  为真  向右
+            g.drawImage(rightImage, getX(), getY(), rightImage.getWidth(null), rightImage.getHeight(null), null);
+        } else if (dodge && !lastTime) {
+            //  闪避  为假  向左
+            g.drawImage(leftImage, getX(), getY(), leftImage.getWidth(null), leftImage.getHeight(null), null);
+        } else {
+            // 不闪避
+            g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
+        }
+    }
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(image, getX(), getY(), image.getWidth(null), image.getHeight(null), null);
+        dodgeDraw(g);
         move();
         fire();
         skill();
@@ -64,6 +97,14 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
             }
         }
         drawInfo(g);
+        if (dodge) {
+            // 打开的时候调用
+            dodgeIndex++;
+            if (dodgeIndex > 150) {
+                dodge = false;
+                dodgeIndex = 0;
+            }
+        }
     }
 
     public void drawInfo(Graphics g) {
@@ -121,12 +162,14 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         }
         if (e.getKeyCode() == KeyEvent.VK_D) {
             right = true;
+            lastTime = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
             down = true;
         }
         if (e.getKeyCode() == KeyEvent.VK_A) {
             left = true;
+            lastTime = false;
         }
         if (e.getKeyCode() == KeyEvent.VK_J) {
             fire = true;
@@ -134,6 +177,7 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         if (e.getKeyCode() == KeyEvent.VK_K) {
             skill = true;
         }
+
     }
 
     public void keyReleased(KeyEvent e) {
@@ -154,6 +198,9 @@ public class Plane extends BaseSprite implements Moveable, Drawable {
         }
         if (e.getKeyCode() == KeyEvent.VK_K) {
             skill = false;
+        }
+        if (e.getKeyCode() == KeyEvent.VK_L) {
+            dodge = true;
         }
     }
 

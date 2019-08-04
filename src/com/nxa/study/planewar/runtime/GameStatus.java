@@ -19,6 +19,7 @@ public class GameStatus extends BaseSprite implements Drawable {
     private List<Image> readyList = new ArrayList<>(); // 准备
     private int index;
 
+
     private int type;  //  1为游戏准备  2游戏结束（赢了） 3游戏结束（时间超过 输了） 4游戏结束（输了）
 
     public int getType() {
@@ -94,29 +95,30 @@ public class GameStatus extends BaseSprite implements Drawable {
                 type = 2;
                 index = 0;
             }
+
         } else if (type == 2) {
             // 赢了
+            gameFrame.game = 6;
             g.drawImage(winList.get(index++ / 5), getX(), getY(), (winList.get(0).getWidth(null)),
                     (winList.get(0).getHeight(null)), null);
             if (index >= winList.size() * 5) {
                 index = 0;
-                gameFrame.game = 5;
             }
         } else if (type == 3) {
             // 超时
+            gameFrame.game = 6;
             g.drawImage(timeOutList.get(index++ / 5), getX(), getY(), (timeOutList.get(0).getWidth(null)),
                     (timeOutList.get(0).getHeight(null)), null);
             if (index >= timeOutList.size() * 5) {
                 index = 0;
-                gameFrame.game = 5;
             }
         } else if (type == 4) {
             //  输了
+            gameFrame.game = 6;
             g.drawImage(gameOverList.get(index++ / 5), getX(), getY(), (int) (gameOverList.get(0).getWidth(null) / 1.5),
                     (int) (gameOverList.get(0).getHeight(null) / 1.5), null);
             if (index >= gameOverList.size() * 5) {
                 index = 0;
-                gameFrame.game = 5;
             }
         }
 

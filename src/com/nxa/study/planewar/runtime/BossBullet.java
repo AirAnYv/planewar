@@ -74,9 +74,15 @@ public class BossBullet extends BaseSprite implements Drawable, Moveable {
     public void collisionTesting(Plane plane) {
         GameFrame gameFrame = DateStore.get("gameFrame");
         if (plane.getRectangle().intersects(this.getRectangle())) {
-            gameFrame.enemyBullets.remove(this);
-            gameFrame.plane.setBlood(gameFrame.plane.getBlood() - 50);
-            if (gameFrame.plane.getBlood() == 0) {
+
+            if (plane.isDodge()) {
+                // 闪避打开
+            } else {
+                // 闪避关闭时
+                gameFrame.bossBullets.remove(this);
+                gameFrame.plane.setBlood(gameFrame.plane.getBlood() - 20);
+            }
+            if (gameFrame.plane.getBlood() <= 0) {
                 gameFrame.gameOver = true;
             }
         }

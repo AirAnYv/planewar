@@ -23,6 +23,6 @@ public class FrameConstant {
 
     public static final double BOSS_APPEARANCE = 6000;
     //public static final double BOSS_APPEARANCE = 800;
-    public static final int MAP_OVER = 10240 - 900;
+    public static final int MAP_OVER = 10240 - 900-100;
 
 }
